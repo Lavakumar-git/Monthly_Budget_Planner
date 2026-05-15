@@ -1,0 +1,140 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card bg-success text-white p-4">
+      <h3>Total Income</h3>
+      <h2>₹ {{ total_income }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card bg-danger text-white p-4">
+      <h3>Total Expense</h3>
+      <h2>₹ {{ total_expense }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card bg-primary text-white p-4">
+      <h3>Balance</h3>
+      <h2>₹ {{ balance }}</h2>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <a href="{% url 'add_income' %}" class="btn btn-success"> Add Income </a>
+
+  <a href="{% url 'add_expense' %}" class="btn btn-danger"> Add Expense </a>
+</div>
+
+<div class="mt-5">
+  <h3>AI Suggestions</h3>
+
+  {% for suggestion in suggestions %}
+
+  <div class="alert alert-warning">{{ suggestion }}</div>
+
+  {% empty %}
+
+  <div class="alert alert-success">Your budget is well managed.</div>
+
+  {% endfor %}
+</div>
+<div class="card mt-5 p-4">
+  <h3 class="mb-4">Income History</h3>
+
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for income in incomes %}
+
+      <tr>
+        <td>{{ income.source }}</td>
+
+        <td>₹ {{ income.amount }}</td>
+
+        <td>{{ income.date }}</td>
+
+        <td>
+          <a
+            href="{% url 'edit_income' income.id %}"
+            class="btn btn-sm btn-warning"
+          >
+            Edit
+          </a>
+
+          <a
+            href="{% url 'delete_income' income.id %}"
+            class="btn btn-sm btn-danger"
+          >
+            Delete
+          </a>
+        </td>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card mt-5 p-4">
+  <h3 class="mb-4">Expense History</h3>
+
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for expense in expenses %}
+
+      <tr>
+        <td>{{ expense.category }}</td>
+
+        <td>{{ expense.description }}</td>
+
+        <td>₹ {{ expense.amount }}</td>
+
+        <td>{{ expense.date }}</td>
+
+        <td>
+          <a
+            href="{% url 'edit_expense' expense.id %}"
+            class="btn btn-sm btn-warning"
+          >
+            Edit
+          </a>
+
+          <a
+            href="{% url 'delete_expense' expense.id %}"
+            class="btn btn-sm btn-danger"
+          >
+            Delete
+          </a>
+        </td>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
