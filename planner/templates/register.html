@@ -1,56 +1,73 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="row justify-content-center align-items-center">
-  <div class="col-md-6 col-lg-5">
-    <div class="card shadow-lg p-4">
-      <h2 class="text-center mb-4">Create Account</h2>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <h1 class="login-title">Create Account</h1>
 
-      <form method="POST">
-        {% csrf_token %}
+      <p class="login-subtitle">Start managing your income and expenses</p>
+    </div>
 
-        <!-- Username -->
+    <!-- ERRORS -->
 
-        <div class="mb-3">
-          <label class="form-label"> Username </label>
+    {% if form.errors %}
 
-          {{ form.username }}
-        </div>
+    <div class="alert alert-danger">Please correct the errors below</div>
 
-        <!-- Email -->
+    {% endif %}
 
-        <div class="mb-3">
-          <label class="form-label"> Email </label>
+    <!-- REGISTER FORM -->
 
-          {{ form.email }}
-        </div>
+    <form method="POST">
+      {% csrf_token %}
 
-        <!-- Password -->
+      <!-- USERNAME -->
 
-        <div class="mb-3">
-          <label class="form-label"> Password </label>
+      <div class="mb-4">
+        <label class="form-label"> Username </label>
 
-          {{ form.password1 }}
-        </div>
-
-        <!-- Confirm Password -->
-
-        <div class="mb-3">
-          <label class="form-label"> Confirm Password </label>
-
-          {{ form.password2 }}
-        </div>
-
-        <button type="submit" class="btn btn-success w-100 mt-3">
-          Register
-        </button>
-      </form>
-
-      <div class="text-center mt-3">
-        <small>
-          Already have an account?
-          <a href="{% url 'login' %}"> Login </a>
-        </small>
+        {{ form.username }}
       </div>
+
+      <!-- EMAIL -->
+
+      <div class="mb-4">
+        <label class="form-label"> Email </label>
+
+        {{ form.email }}
+      </div>
+
+      <!-- PASSWORD -->
+
+      <div class="mb-4">
+        <label class="form-label"> Password </label>
+
+        {{ form.password1 }}
+      </div>
+
+      <!-- CONFIRM PASSWORD -->
+
+      <div class="mb-4">
+        <label class="form-label"> Confirm Password </label>
+
+        {{ form.password2 }}
+      </div>
+
+      <!-- REGISTER BUTTON -->
+
+      <button type="submit" class="btn btn-success login-btn">
+        Create Account
+      </button>
+    </form>
+
+    <!-- LOGIN LINK -->
+
+    <div class="text-center mt-4">
+      <p>
+        Already have an account?
+
+        <a href="{% url 'login' %}"> Login </a>
+      </p>
     </div>
   </div>
 </div>

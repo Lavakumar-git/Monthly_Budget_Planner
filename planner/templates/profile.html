@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="profile-page">
+  <div class="profile-card-modern">
+    <!-- COVER -->
+
+    <div class="profile-cover"></div>
+
+    <!-- PROFILE CONTENT -->
+
+    <div class="profile-content">
+      <!-- AVATAR -->
+
+      <div class="profile-avatar-modern">
+        {{ user.username|slice:":2"|upper }}
+      </div>
+
+      <!-- USER INFO -->
+
+      <h2 class="profile-name">{{ user.username }}</h2>
+
+      <p class="profile-email">{{ user.email }}</p>
+
+
+
+      <!-- ACTIONS -->
+
+      <div class="profile-actions">
+        <a href="{% url 'history' %}" class="profile-btn history-btn">
+          View History
+        </a>
+
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+
+          <button type="submit" class="profile-btn logout-btn-profile">
+            Logout
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

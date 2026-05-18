@@ -8,10 +8,19 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from .models import Expense
 import json
+from django.db.models import Sum
 
 
 def home(request):
     return render(request,'home.html')
+
+@login_required
+def profile(request):
+
+    return render(
+        request,
+        'profile.html'
+    )
 
 
 def register_view(request):
@@ -30,36 +39,80 @@ def register_view(request):
 
 @login_required
 def dashboard(request):
+    income_form = IncomeForm()
+
+    expense_form = ExpenseForm()
 
     incomes = Income.objects.filter(user=request.user)
 
     expenses = Expense.objects.filter(user=request.user)
 
-    total_income = incomes.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_income = incomes.aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
 
-    total_expense = expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_expense = expenses.aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
 
     balance = total_income - total_expense
+
+    # AI SUGGESTIONS
 
     suggestions = []
 
     if total_expense > total_income:
+
         suggestions.append(
-            "Your expenses are higher than income."
+            "⚠ Your expenses are higher than your income."
         )
 
-    shopping_total = expenses.filter(category='Shopping').aggregate(Sum('amount'))['amount__sum'] or 0
+    if balance < 1000:
+
+        suggestions.append(
+            " Your balance is very low. Try reducing unnecessary spending."
+        )
+
+    shopping_total = expenses.filter(
+        category='Shopping'
+    ).aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
 
     if shopping_total > total_income * 0.3:
-        suggestions.append("Reduce shopping expenses.")
+
+        suggestions.append(
+            " Shopping expenses are too high this month."
+        )
+
+    food_total = expenses.filter(
+        category='Food'
+    ).aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
+
+    if food_total > total_income * 0.2:
+
+        suggestions.append(
+            " Food expenses are higher than recommended."
+        )
+
+    if total_income > total_expense:
+
+        suggestions.append(
+            " Excellent budgeting! Your savings ratio looks healthy."
+        )
 
     context = {
+
         'total_income': total_income,
         'total_expense': total_expense,
         'balance': balance,
         'suggestions': suggestions,
         'incomes': incomes,
         'expenses': expenses,
+        'income_form': income_form,
+        'expense_form': expense_form,
     }
 
     return render(
@@ -84,6 +137,36 @@ def add_income(request):
         form = IncomeForm()
 
     return render(request, 'add_income.html', {'form': form})
+
+@login_required
+def profile(request):
+
+    return render(
+        request,
+        'profile.html'
+    )
+
+@login_required
+def history(request):
+
+    incomes = Income.objects.filter(
+        user=request.user
+    )
+
+    expenses = Expense.objects.filter(
+        user=request.user
+    )
+
+    context = {
+        'incomes': incomes,
+        'expenses': expenses,
+    }
+
+    return render(
+        request,
+        'history.html',
+        context
+    )
 
 
 @login_required
@@ -119,7 +202,7 @@ def edit_income(request, id):
 
         if form.is_valid():
             form.save()
-            return redirect('dashboard')
+            return redirect('history')
 
     else:
         form = IncomeForm(instance=income)
@@ -141,7 +224,7 @@ def delete_income(request, id):
 
     income.delete()
 
-    return redirect('dashboard')
+    return redirect('history')
 
 
 # EDIT EXPENSE
@@ -164,7 +247,7 @@ def edit_expense(request, id):
 
         if form.is_valid():
             form.save()
-            return redirect('dashboard')
+            return redirect('history')
 
     else:
         form = ExpenseForm(instance=expense)
@@ -189,5 +272,43 @@ def delete_expense(request, id):
 
     expense.delete()
 
-    return redirect('dashboard')
+    return redirect('history')
 
+from django.db.models import Sum
+
+
+@login_required
+def history(request):
+
+    incomes = Income.objects.filter(
+        user=request.user
+    ).order_by('-date')
+
+    expenses = Expense.objects.filter(
+        user=request.user
+    ).order_by('-date')
+
+    total_income = incomes.aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
+
+    total_expense = expenses.aggregate(
+        Sum('amount')
+    )['amount__sum'] or 0
+
+    context = {
+
+        'incomes': incomes,
+
+        'expenses': expenses,
+
+        'total_income': total_income,
+
+        'total_expense': total_expense,
+    }
+
+    return render(
+        request,
+        'history.html',
+        context
+    )

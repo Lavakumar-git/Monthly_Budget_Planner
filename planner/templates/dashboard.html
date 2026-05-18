@@ -1,140 +1,155 @@
 {% extends 'base.html' %} {% block content %}
 
-<h1 class="mb-4">Dashboard</h1>
+<div class="dashboard-container">
+  <!-- HEADER -->
 
-<div class="row">
-  <div class="col-md-4">
-    <div class="card bg-success text-white p-4">
-      <h3>Total Income</h3>
-      <h2>₹ {{ total_income }}</h2>
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">Financial Dashboard</h1>
+
+      <p class="dashboard-subtitle">Welcome back, {{ user.username }}</p>
     </div>
   </div>
 
-  <div class="col-md-4">
-    <div class="card bg-danger text-white p-4">
-      <h3>Total Expense</h3>
-      <h2>₹ {{ total_expense }}</h2>
-    </div>
+  <!-- =========================
+         AI SUGGESTIONS
+    ========================= -->
+
+  <div class="suggestion-box">
+    {% if suggestions %} {% for suggestion in suggestions %}
+
+    <div class="alert alert-info mb-3">{{ suggestion }}</div>
+
+    {% endfor %} {% else %}
+
+    <div class="alert alert-success">Your budget looks healthy.</div>
+
+    {% endif %}
   </div>
 
-  <div class="col-md-4">
-    <div class="card bg-primary text-white p-4">
-      <h3>Balance</h3>
-      <h2>₹ {{ balance }}</h2>
+  <!-- =========================
+         ACTION BUTTONS
+    ========================= -->
+
+  <div class="dashboard-actions">
+    <!-- ADD INCOME -->
+
+    <button
+      type="button"
+      class="action-btn income-action-btn"
+      data-bs-toggle="modal"
+      data-bs-target="#incomeModal"
+    >
+      Add Income
+    </button>
+
+    <!-- ADD EXPENSE -->
+
+    <button
+      type="button"
+      class="action-btn expense-action-btn"
+      data-bs-toggle="modal"
+      data-bs-target="#expenseModal"
+    >
+      Add Expense
+    </button>
+  </div>
+
+  <!-- =========================
+         DASHBOARD CARDS
+    ========================= -->
+
+  <div class="row mt-4">
+    <!-- INCOME -->
+
+    <div class="col-md-4">
+      <div class="dashboard-card income-card">
+        <h2>₹ {{ total_income }}</h2>
+
+        <p>Total Income</p>
+      </div>
+    </div>
+
+    <!-- EXPENSE -->
+
+    <div class="col-md-4">
+      <div class="dashboard-card expense-card">
+        <h2>₹ {{ total_expense }}</h2>
+
+        <p>Total Expense</p>
+      </div>
+    </div>
+
+    <!-- BALANCE -->
+
+    <div class="col-md-4">
+      <div class="dashboard-card balance-card">
+        <h2>₹ {{ balance }}</h2>
+
+        <p>Remaining Balance</p>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="mt-4">
-  <a href="{% url 'add_income' %}" class="btn btn-success"> Add Income </a>
+<!-- =========================
+     INCOME MODAL
+========================= -->
 
-  <a href="{% url 'add_expense' %}" class="btn btn-danger"> Add Expense </a>
+<div class="modal fade" id="incomeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header border-0">
+        <h3>Add Income</h3>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <form method="POST" action="{% url 'add_income' %}">
+          {% csrf_token %} {{ income_form.as_p }}
+
+          <button type="submit" class="save-btn income-save">
+            Save Income
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="mt-5">
-  <h3>AI Suggestions</h3>
+<!-- =========================
+     EXPENSE MODAL
+========================= -->
 
-  {% for suggestion in suggestions %}
+<div class="modal fade" id="expenseModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header border-0">
+        <h3>Add Expense</h3>
 
-  <div class="alert alert-warning">{{ suggestion }}</div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
 
-  {% empty %}
+      <div class="modal-body">
+        <form method="POST" action="{% url 'add_expense' %}">
+          {% csrf_token %} {{ expense_form.as_p }}
 
-  <div class="alert alert-success">Your budget is well managed.</div>
-
-  {% endfor %}
-</div>
-<div class="card mt-5 p-4">
-  <h3 class="mb-4">Income History</h3>
-
-  <table class="table table-dark table-hover">
-    <thead>
-      <tr>
-        <th>Source</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for income in incomes %}
-
-      <tr>
-        <td>{{ income.source }}</td>
-
-        <td>₹ {{ income.amount }}</td>
-
-        <td>{{ income.date }}</td>
-
-        <td>
-          <a
-            href="{% url 'edit_income' income.id %}"
-            class="btn btn-sm btn-warning"
-          >
-            Edit
-          </a>
-
-          <a
-            href="{% url 'delete_income' income.id %}"
-            class="btn btn-sm btn-danger"
-          >
-            Delete
-          </a>
-        </td>
-      </tr>
-
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-<div class="card mt-5 p-4">
-  <h3 class="mb-4">Expense History</h3>
-
-  <table class="table table-dark table-hover">
-    <thead>
-      <tr>
-        <th>Category</th>
-        <th>Description</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for expense in expenses %}
-
-      <tr>
-        <td>{{ expense.category }}</td>
-
-        <td>{{ expense.description }}</td>
-
-        <td>₹ {{ expense.amount }}</td>
-
-        <td>{{ expense.date }}</td>
-
-        <td>
-          <a
-            href="{% url 'edit_expense' expense.id %}"
-            class="btn btn-sm btn-warning"
-          >
-            Edit
-          </a>
-
-          <a
-            href="{% url 'delete_expense' expense.id %}"
-            class="btn btn-sm btn-danger"
-          >
-            Delete
-          </a>
-        </td>
-      </tr>
-
-      {% endfor %}
-    </tbody>
-  </table>
+          <button type="submit" class="save-btn expense-save">
+            Save Expense
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

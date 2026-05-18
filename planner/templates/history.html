@@ -1,0 +1,185 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="history-page">
+  <!-- PAGE TITLE -->
+
+  <div class="history-header">
+    <h1 class="history-title">Transaction History</h1>
+
+    <p class="history-subtitle">Track all your income and expenses</p>
+  </div>
+
+  <div class="history-grid">
+    <!-- =========================
+             INCOME SECTION
+        ========================= -->
+
+    <div class="history-card income-history-card">
+      <div class="history-card-header income-header">
+        <h2>Income History</h2>
+      </div>
+
+      <div class="history-table-wrapper">
+        <table class="modern-history-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+
+              <th>Amount</th>
+
+              <th>Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for income in incomes %}
+
+            <tr>
+              <td>{{ income.source }}</td>
+
+              <td class="income-amount">₹ {{ income.amount }}</td>
+
+              <td>{{ income.date }}</td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+              <td colspan="3">No income records found.</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- =========================
+             EXPENSE SECTION
+        ========================= -->
+
+    <div class="history-card expense-history-card">
+      <div class="history-card-header expense-header">
+        <h2>Expense History</h2>
+      </div>
+
+      <div class="history-table-wrapper">
+        <table class="modern-history-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+
+              <th>Amount</th>
+
+              <th>Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for expense in expenses %}
+
+            <tr>
+              <td>
+                <span class="category-badge"> {{ expense.category }} </span>
+              </td>
+
+              <td class="expense-amount">₹ {{ expense.amount }}</td>
+
+              <td>{{ expense.date }}</td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+              <td colspan="3">No expense records found.</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================
+     CHART SECTION
+========================= -->
+
+<div class="chart-container">
+  <div class="chart-card">
+    <h2 class="chart-title">Income vs Expense Analytics</h2>
+
+    <canvas id="financeChart"></canvas>
+  </div>
+</div>
+
+<!-- CHART JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+  const ctx = document.getElementById('financeChart');
+
+  new Chart(ctx, {
+
+      type: 'pie',
+
+      data: {
+
+          labels: [
+
+              'Income',
+
+              'Expense'
+          ],
+
+          datasets: [{
+
+              data: [
+
+                  {{ total_income }},
+
+                  {{ total_expense }}
+              ],
+
+              backgroundColor: [
+
+                  '#22c55e',
+
+                  '#ef4444'
+              ],
+
+              borderWidth: 0
+          }]
+      },
+
+      options: {
+
+          responsive: true,
+
+          plugins: {
+
+              legend: {
+
+                  position: 'bottom',
+
+                  labels: {
+
+                      padding: 20,
+
+                      font: {
+
+                          size: 15,
+
+                          weight: '600'
+                      }
+                  }
+              }
+          }
+      }
+  });
+</script>
+
+{% endblock %}

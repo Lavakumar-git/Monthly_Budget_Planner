@@ -1,38 +1,59 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="row justify-content-center">
-  <div class="col-md-5">
-    <div class="card shadow p-4">
-      <h2 class="text-center mb-4">Login</h2>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <h1 class="login-title">Welcome Back</h1>
 
-      {% if form.errors %}
-      <div class="alert alert-danger">Invalid Username or Password</div>
-      {% endif %}
+      <p class="login-subtitle">Login to continue managing your budget</p>
+    </div>
 
-      <form method="POST">
-        {% csrf_token %}
+    {% if form.errors %}
 
-        <div class="mb-3">
-          <label class="form-label"> Username </label>
+    <div class="alert alert-danger">Invalid username or password</div>
 
-          <input type="text" name="username" class="form-control" required />
-        </div>
+    {% endif %}
 
-        <div class="mb-3">
-          <label class="form-label"> Password </label>
+    <form method="POST">
+      {% csrf_token %}
 
-          <input type="password" name="password" class="form-control" required/>
-        </div>
+      <!-- USERNAME -->
 
-        <button type="submit" class="btn btn-primary w-100">Login</button>
-      </form>
+      <div class="mb-4">
+        <label class="form-label"> Username </label>
 
-      <div class="mt-3 text-center">
-        <p>
-          Don't have an account?
-          <a href="{% url 'register' %}"> Register </a>
-        </p>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          placeholder="Enter username"
+          required
+        />
       </div>
+
+      <!-- PASSWORD -->
+
+      <div class="mb-4">
+        <label class="form-label"> Password </label>
+
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="Enter password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary login-btn">Login</button>
+    </form>
+
+    <div class="text-center mt-4">
+      <p>
+        Don't have an account?
+
+        <a href="{% url 'register' %}"> Register </a>
+      </p>
     </div>
   </div>
 </div>
