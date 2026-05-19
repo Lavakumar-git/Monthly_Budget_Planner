@@ -66,7 +66,7 @@ def dashboard(request):
 
     elif balance >=0 and balance< 3000:
 
-        suggestions.append(" Your balance is very low. Try reducing unnecessary spending.")
+        suggestions.append(" Your balance is very low. Try reducing unnecessary spending and try to gain more income.")
      
     elif balance >= 3000 and balance < 5000:
 
