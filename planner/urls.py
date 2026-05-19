@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import *
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -15,5 +16,8 @@ urlpatterns = [
        path('edit-expense/<int:id>/',views.edit_expense,name='edit_expense'),
        path('delete-expense/<int:id>/',views.delete_expense,name='delete_expense'),
        path('profile/',views.profile,name='profile'),path('history/',views.history,name='history'),
-
+       path('api/income/',IncomeListCreateAPIView.as_view(),name='income_api'),
+       path('api/income/<int:pk>/',IncomeDetailAPIView.as_view(),name='income_detail_api'),
+       path('api/expense/',ExpenseListCreateAPIView.as_view(),name='expense_api'),
+       path('api/expense/<int:pk>/',ExpenseDetailAPIView.as_view(),name='expense_detail_api'),
 ]

@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 
 <div class="history-page">
-  <!-- PAGE TITLE -->
+  <!-- PAGE HEADER -->
 
   <div class="history-header">
     <h1 class="history-title">Transaction History</h1>
@@ -11,8 +11,8 @@
 
   <div class="history-grid">
     <!-- =========================
-             INCOME SECTION
-        ========================= -->
+            INCOME HISTORY
+    ========================== -->
 
     <div class="history-card income-history-card">
       <div class="history-card-header income-header">
@@ -28,6 +28,8 @@
               <th>Amount</th>
 
               <th>Date</th>
+
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -35,17 +37,49 @@
             {% for income in incomes %}
 
             <tr>
+              <!-- SOURCE -->
+
               <td>{{ income.source }}</td>
 
-              <td class="income-amount">₹ {{ income.amount }}</td>
+              <!-- AMOUNT -->
+
+              <td>
+                <span class="income-amount"> ₹ {{ income.amount }} </span>
+              </td>
+
+              <!-- DATE -->
 
               <td>{{ income.date }}</td>
+
+              <!-- ACTIONS -->
+
+              <td>
+                <div class="history-actions">
+                  <!-- EDIT -->
+
+                  <a
+                    href="{% url 'edit_income' income.id %}"
+                    class="edit-btn-history"
+                  >
+                    Edit
+                  </a>
+
+                  <!-- DELETE -->
+
+                  <a
+                    href="{% url 'delete_income' income.id %}"
+                    class="delete-btn-history"
+                  >
+                    Delete
+                  </a>
+                </div>
+              </td>
             </tr>
 
             {% empty %}
 
             <tr>
-              <td colspan="3">No income records found.</td>
+              <td colspan="4">No income records found.</td>
             </tr>
 
             {% endfor %}
@@ -55,8 +89,8 @@
     </div>
 
     <!-- =========================
-             EXPENSE SECTION
-        ========================= -->
+            EXPENSE HISTORY
+    ========================== -->
 
     <div class="history-card expense-history-card">
       <div class="history-card-header expense-header">
@@ -69,9 +103,13 @@
             <tr>
               <th>Category</th>
 
+              <th>Description</th>
+
               <th>Amount</th>
 
               <th>Date</th>
+
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -79,19 +117,53 @@
             {% for expense in expenses %}
 
             <tr>
+              <!-- CATEGORY -->
+
               <td>
                 <span class="category-badge"> {{ expense.category }} </span>
               </td>
 
+              <!-- DESCRIPTION -->
+
+              <td>{{ expense.description }}</td>
+
+              <!-- AMOUNT -->
+
               <td class="expense-amount">₹ {{ expense.amount }}</td>
 
+              <!-- DATE -->
+
               <td>{{ expense.date }}</td>
+
+              <!-- ACTIONS -->
+
+              <td>
+                <div class="history-actions">
+                  <!-- EDIT -->
+
+                  <a
+                    href="{% url 'edit_expense' expense.id %}"
+                    class="edit-btn-history"
+                  >
+                    Edit
+                  </a>
+
+                  <!-- DELETE -->
+
+                  <a
+                    href="{% url 'delete_expense' expense.id %}"
+                    class="delete-btn-history"
+                  >
+                    Delete
+                  </a>
+                </div>
+              </td>
             </tr>
 
             {% empty %}
 
             <tr>
-              <td colspan="3">No expense records found.</td>
+              <td colspan="5">No expense records found.</td>
             </tr>
 
             {% endfor %}
@@ -103,7 +175,7 @@
 </div>
 
 <!-- =========================
-     CHART SECTION
+        CHART SECTION
 ========================= -->
 
 <div class="chart-container">
@@ -133,6 +205,7 @@
               'Income',
 
               'Expense'
+
           ],
 
           datasets: [{
@@ -142,6 +215,7 @@
                   {{ total_income }},
 
                   {{ total_expense }}
+
               ],
 
               backgroundColor: [
@@ -149,9 +223,11 @@
                   '#22c55e',
 
                   '#ef4444'
+
               ],
 
               borderWidth: 0
+
           }]
       },
 

@@ -320,14 +320,13 @@ body {
   padding: 20px 50px;
   border-radius: 28px;
   backdrop-filter: blur(12px);
-   box-shadow: 0 0 25px rgb(0, 247, 169);
+  box-shadow: 0 0 25px rgb(0, 247, 169);
 }
 
 .maintext {
   color: white;
   font-size: 50px;
   font-weight: 700;
- 
 }
 
 .subtext {
@@ -353,7 +352,6 @@ body {
   color: #2e2581;
   font-size: 30px;
   text-decoration: underline solid #2e2581;
-  
 }
 
 .dashboard-actions {
@@ -709,8 +707,6 @@ body {
   transform: translateY(0);
 }
 
-
-
 @media (max-width: 992px) {
   .analytics-grid {
     grid-template-columns: 1fr;
@@ -728,37 +724,97 @@ body {
 /* CARD */
 
 .chart-card {
+  width: 170vh;
 
-    width: 170vh;
+  margin: auto;
 
-    margin: auto;
+  background: white;
 
-    background: white;
+  padding: 18px;
 
-    padding: 18px;
+  border-radius: 14px;
 
-    border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-
-    text-align: center;
+  text-align: center;
 }
 
 /* TITLE */
 
 .chart-title {
-
-    font-size: 24px;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 20px;
 }
 
 /* CHART SIZE */
 
 #financeChart {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+}
 
-    width: 300px ;
-    height: 300px ;
-    margin: auto;
+/* =========================
+   HISTORY ACTION BUTTONS
+========================= */
+
+.history-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+/* COMMON BUTTON STYLE */
+
+.edit-btn-history,
+.delete-btn-history {
+  padding: 8px 16px;
+
+  border-radius: 10px;
+
+  text-decoration: none !important;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  display: inline-block;
+
+  transition: 0.3s ease;
+}
+
+/* EDIT BUTTON */
+
+.edit-btn-history {
+  background: #dbeafe;
+
+  color: #2563eb !important;
+}
+
+.edit-btn-history:hover {
+  background: #2563eb;
+
+  color: white !important;
+
+  transform: translateY(-2px);
+}
+
+/* DELETE BUTTON */
+
+.delete-btn-history {
+  background: #fee2e2;
+
+  color: #ef4444 !important;
+}
+
+.delete-btn-history:hover {
+  background: #ef4444;
+
+  color: white !important;
+
+  transform: translateY(-2px);
 }

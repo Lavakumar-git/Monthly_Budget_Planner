@@ -63,45 +63,23 @@ def dashboard(request):
 
     if total_expense > total_income:
 
-        suggestions.append(
-            "⚠ Your expenses are higher than your income."
-        )
+        suggestions.append( "⚠ Your expenses are higher than your income, try to reduce your expenses." )
+    
+    elif balance >= 30000 :
+        suggestions.append("Excellent! You have a very healthy balance. Consider exploring investment opportunities or saving for long-term goals.")
 
-    if balance < 1000:
+    elif balance >= 5000 and balance < 10000:
 
-        suggestions.append(
-            " Your balance is very low. Try reducing unnecessary spending."
-        )
+        suggestions.append(" Your balance is decent, but there's room for improvement. Consider setting a budget and tracking your expenses more closely.")
 
-    shopping_total = expenses.filter(
-        category='Shopping'
-    ).aggregate(
-        Sum('amount')
-    )['amount__sum'] or 0
+    elif balance >=0 and balance< 3000:
 
-    if shopping_total > total_income * 0.3:
+        suggestions.append(" Your balance is very low. Try reducing unnecessary spending.")
+    
+    elif balance >= 10000 and balance < 15000:
+        suggestions.append("Great job! You have a healthy balance. Consider investing or saving more.")
 
-        suggestions.append(
-            " Shopping expenses are too high this month."
-        )
 
-    food_total = expenses.filter(
-        category='Food'
-    ).aggregate(
-        Sum('amount')
-    )['amount__sum'] or 0
-
-    if food_total > total_income * 0.2:
-
-        suggestions.append(
-            " Food expenses are higher than recommended."
-        )
-
-    if total_income > total_expense:
-
-        suggestions.append(
-            " Excellent budgeting! Your savings ratio looks healthy."
-        )
 
     context = {
 
@@ -312,3 +290,63 @@ def history(request):
         'history.html',
         context
     )
+
+
+from rest_framework import generics
+
+from .serializers import (
+    IncomeSerializer,
+    ExpenseSerializer
+)
+
+from .models import (
+    Income,
+    Expense
+)
+
+# =========================
+# INCOME APIs
+# =========================
+
+class IncomeListCreateAPIView(
+
+    generics.ListCreateAPIView
+):
+
+    queryset = Income.objects.all()
+
+    serializer_class = IncomeSerializer
+
+
+class IncomeDetailAPIView(
+
+    generics.RetrieveUpdateDestroyAPIView
+):
+
+    queryset = Income.objects.all()
+
+    serializer_class = IncomeSerializer
+
+
+# =========================
+# EXPENSE APIs
+# =========================
+
+class ExpenseListCreateAPIView(
+
+    generics.ListCreateAPIView
+):
+
+    queryset = Expense.objects.all()
+
+    serializer_class = ExpenseSerializer
+
+
+class ExpenseDetailAPIView(
+
+    generics.RetrieveUpdateDestroyAPIView
+):
+
+    queryset = Expense.objects.all()
+
+    serializer_class = ExpenseSerializer
