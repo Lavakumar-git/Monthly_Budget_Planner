@@ -2,62 +2,78 @@
 
 <div class="login-wrapper">
   <div class="login-card">
+    <!-- TITLE -->
+
     <div class="text-center mb-4">
       <h1 class="login-title">Create Account</h1>
 
       <p class="login-subtitle">Start managing your income and expenses</p>
     </div>
 
-    <!-- ERRORS -->
-
-    {% if form.errors %}
-
-    <div class="alert alert-danger">Please correct the errors below</div>
-
-    {% endif %}
-
-    <!-- REGISTER FORM -->
+    <!-- FORM -->
 
     <form method="POST">
       {% csrf_token %}
 
+      <!-- NON FIELD ERRORS -->
+
+      {% if form.non_field_errors %}
+
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+
+      {% endif %}
+
       <!-- USERNAME -->
 
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="form-label"> Username </label>
 
-        {{ form.username }}
+        {{ form.username }} {% if form.username.errors %}
+
+        <small class="text-danger"> {{ form.username.errors }} </small>
+
+        {% endif %}
       </div>
 
       <!-- EMAIL -->
 
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="form-label"> Email </label>
 
-        {{ form.email }}
+        {{ form.email }} {% if form.email.errors %}
+
+        <small class="text-danger"> {{ form.email.errors }} </small>
+
+        {% endif %}
       </div>
 
       <!-- PASSWORD -->
 
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="form-label"> Password </label>
 
-        {{ form.password1 }}
+        {{ form.password1 }} {% if form.password1.errors %}
+
+        <small class="text-danger"> {{ form.password1.errors }} </small>
+
+        {% endif %}
       </div>
 
       <!-- CONFIRM PASSWORD -->
 
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="form-label"> Confirm Password </label>
 
-        {{ form.password2 }}
+        {{ form.password2 }} {% if form.password2.errors %}
+
+        <small class="text-danger"> {{ form.password2.errors }} </small>
+
+        {% endif %}
       </div>
 
       <!-- REGISTER BUTTON -->
 
-      <button type="submit" class="btn btn-success login-btn">
-        Create Account
-      </button>
+      <button type="submit" class="login-btn">Create Account</button>
     </form>
 
     <!-- LOGIN LINK -->

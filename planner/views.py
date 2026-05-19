@@ -60,24 +60,35 @@ def dashboard(request):
     # AI SUGGESTIONS
 
     suggestions = []
+    if total_income == 0 and total_expense == 0:
 
-    if total_expense > total_income:
-
-        suggestions.append( "⚠ Your expenses are higher than your income, try to reduce your expenses." )
-    
-    elif balance >= 30000 :
-        suggestions.append("Excellent! You have a very healthy balance. Consider exploring investment opportunities or saving for long-term goals.")
-
-    elif balance >= 5000 and balance < 10000:
-
-        suggestions.append(" Your balance is decent, but there's room for improvement. Consider setting a budget and tracking your expenses more closely.")
+        suggestions.append("You haven't added any income or expenses yet. Start by adding your income and expenses to get insights and suggestions.")
 
     elif balance >=0 and balance< 3000:
 
         suggestions.append(" Your balance is very low. Try reducing unnecessary spending.")
-    
-    elif balance >= 10000 and balance < 15000:
+     
+    elif balance >= 3000 and balance < 5000:
+
+        suggestions.append("Your balance is decresing. Consider reviewing your expenses")
+  
+    elif balance >= 5000 and balance < 10000:
+
+        suggestions.append(" Your balance is decent, but there's room for improvement. Consider setting a budget and tracking your expenses more closely.")
+     
+    elif balance >= 10000 and balance < 20000:
+
         suggestions.append("Great job! You have a healthy balance. Consider investing or saving more.")
+
+    elif balance >= 20000 and balance < 30000:
+        suggestions.append("You're doing great! Consider exploring investment opportunities to grow your wealth.")
+
+    elif balance >= 30000:
+        suggestions.append("Excellent! You have a very healthy balance. Consider exploring investment opportunities or saving for long-term goals.")
+
+    elif total_expense > total_income:
+
+        suggestions.append( "⚠ Your expenses are higher than your income, try to reduce your expenses." )
 
 
 
@@ -350,3 +361,29 @@ class ExpenseDetailAPIView(
     queryset = Expense.objects.all()
 
     serializer_class = ExpenseSerializer
+
+    from django.shortcuts import render, redirect
+from .forms import RegisterForm
+
+
+def register_view(request):
+
+    if request.method == "POST":
+
+        form = RegisterForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect('login')
+
+    else:
+
+        form = RegisterForm()
+
+    return render(request, 'register.html', {
+
+        'form': form
+
+    })
