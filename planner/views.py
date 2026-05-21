@@ -9,6 +9,9 @@ from django.http import JsonResponse
 from .models import Expense
 import json
 from django.db.models import Sum
+from .forms import ForgotPasswordForm
+from .models import UserProfile
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -387,3 +390,69 @@ def register_view(request):
         'form': form
 
     })
+
+
+
+
+
+def forgot_password(request):
+
+    question = None
+
+    message = None
+
+    if request.method == 'POST':
+
+        form = ForgotPasswordForm(request.POST)
+
+        username = request.POST.get('username')
+
+        try:
+
+            user = User.objects.get(username=username)
+
+            profile = UserProfile.objects.get(user=user)
+
+            question = profile.security_question
+
+            answer = request.POST.get('security_answer')
+
+            new_password = request.POST.get('new_password')
+
+            if answer and new_password:
+
+                if profile.security_answer.lower() == answer.lower():
+
+                    user.set_password(new_password)
+
+                    user.save()
+
+                    message = "Password updated successfully"
+
+                else:
+
+                    message = "Wrong security answer"
+
+        except User.DoesNotExist:
+
+            message = "User not found"
+
+    else:
+
+        form = ForgotPasswordForm()
+
+    return render(
+
+        request,
+
+        'forgot_password.html',
+
+        {
+
+            'form': form,
+
+            'question': question,
+
+            'message': message
+        }
+    )

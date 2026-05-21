@@ -1,40 +1,32 @@
-
 {% extends 'base.html' %} {% block content %}
-{% load static %}
 
 <div class="login-wrapper">
   <div class="login-card">
-    <!-- TITLE -->
-
     <div class="text-center mb-4">
       <h1 class="login-title">Create Account</h1>
 
       <p class="login-subtitle">Start managing your income and expenses</p>
     </div>
 
-    <!-- FORM -->
+    <!-- ERRORS -->
+
+    {% if form.errors %}
+
+    <div class="alert alert-danger">Please correct the errors below</div>
+
+    {% endif %}
+
+    <!-- REGISTER FORM -->
 
     <form method="POST">
       {% csrf_token %}
-
-      <!-- NON FIELD ERRORS -->
-
-      {% if form.non_field_errors %}
-
-      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-
-      {% endif %}
 
       <!-- USERNAME -->
 
       <div class="mb-3">
         <label class="form-label"> Username </label>
 
-        {{ form.username }} {% if form.username.errors %}
-
-        <small class="text-danger"> {{ form.username.errors }} </small>
-
-        {% endif %}
+        {{ form.username }}
       </div>
 
       <!-- EMAIL -->
@@ -42,11 +34,23 @@
       <div class="mb-3">
         <label class="form-label"> Email </label>
 
-        {{ form.email }} {% if form.email.errors %}
+        {{ form.email }}
+      </div>
 
-        <small class="text-danger"> {{ form.email.errors }} </small>
+      <!-- SECURITY QUESTION -->
 
-        {% endif %}
+      <div class="mb-3">
+        <label class="form-label"> Security Question </label>
+
+        {{ form.security_question }}
+      </div>
+
+      <!-- SECURITY ANSWER -->
+
+      <div class="mb-3">
+        <label class="form-label"> Security Answer </label>
+
+        {{ form.security_answer }}
       </div>
 
       <!-- PASSWORD -->
@@ -54,11 +58,7 @@
       <div class="mb-3">
         <label class="form-label"> Password </label>
 
-        {{ form.password1 }} {% if form.password1.errors %}
-
-        <small class="text-danger"> {{ form.password1.errors }} </small>
-
-        {% endif %}
+        {{ form.password1 }}
       </div>
 
       <!-- CONFIRM PASSWORD -->
@@ -66,14 +66,10 @@
       <div class="mb-3">
         <label class="form-label"> Confirm Password </label>
 
-        {{ form.password2 }} {% if form.password2.errors %}
-
-        <small class="text-danger"> {{ form.password2.errors }} </small>
-
-        {% endif %}
+        {{ form.password2 }}
       </div>
 
-      <!-- REGISTER BUTTON -->
+      <!-- SUBMIT BUTTON -->
 
       <button type="submit" class="login-btn">Create Account</button>
     </form>

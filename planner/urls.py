@@ -20,4 +20,14 @@ urlpatterns = [
        path('api/income/<int:pk>/',IncomeDetailAPIView.as_view(),name='income_detail_api'),
        path('api/expense/',ExpenseListCreateAPIView.as_view(),name='expense_api'),
        path('api/expense/<int:pk>/',ExpenseDetailAPIView.as_view(),name='expense_detail_api'),
+
+
+path(
+
+    'forgot-password/',
+
+    views.forgot_password,
+
+    name='forgot_password'
+),
 ]
