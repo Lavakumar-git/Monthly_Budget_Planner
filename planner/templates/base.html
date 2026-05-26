@@ -7,141 +7,219 @@
     <meta charset="UTF-8" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="{% static 'styles.css' %}" rel="stylesheet" />
 
     <title>Monthly Budget Planner</title>
+
+    <!-- LOADER CSS (INLINE FOR FAST LOADING) -->
+
+    <style>
+
+      body{
+        margin:0;
+      }
+
+      #loader{
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100vh;
+
+        background: #0f172a;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        z-index: 999999;
+      }
+
+      .spinner{
+        width: 60px;
+        height: 60px;
+
+        border: 6px solid #334155;
+        border-top: 6px solid #38bdf8;
+
+        border-radius: 50%;
+
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin{
+        100%{
+          transform: rotate(360deg);
+        }
+      }
+
+    </style>
+
+    <!-- MAIN CSS -->
+
+    <link href="{% static 'styles.css' %}" rel="stylesheet" />
+
+    <!-- BOOTSTRAP -->
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
 
+    <!-- GOOGLE FONT -->
+
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="{% static 'styles.css' %}" />
   </head>
 
   <body>
 
     <!-- PAGE LOADER -->
-<div id="loader">
-  <div class="spinner"></div>
-</div>
+
+    <div id="loader">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- NAVBAR -->
 
     <nav class="premium-navbar">
       <div class="nav-container">
+
         <!-- LOGO -->
 
         <a href="{% url 'home' %}" class="brand-logo">
+
           <div class="logo-box">₹</div>
 
           <div class="brand-text">
             <h2>Budget Planner</h2>
-
-            <span> Smart Finance Tracker </span>
+            <span>Smart Finance Tracker</span>
           </div>
+
         </a>
 
         <div class="nav-right">
+
           {% if user.is_authenticated %}
 
           <a href="{% url 'dashboard' %}" class="nav-link-custom">
             Dashboard
           </a>
 
-          <!-- PROFILE DROPDOWN -->
+          <!-- PROFILE BUTTON -->
 
-      <button
-    class="modern-profile-btn"
-    type="button"
-    data-bs-toggle="dropdown"
->
+          <button
+            class="modern-profile-btn"
+            type="button"
+            data-bs-toggle="dropdown"
+          >
 
-    <div class="profile-avatar-navbar">
+            <div class="profile-avatar-navbar">
 
-        {{ user.username|slice:":1"|upper }}
+              {{ user.username|slice:":1"|upper }}
 
-    </div>
+            </div>
 
-</button>
-            <ul class="dropdown-menu custom-dropdown dropdown-menu-end">
-              <!-- USER INFO -->
+          </button>
 
-              <li class="dropdown-user">
-                <div class="dropdown-avatar">
-                  {{ user.username|first|upper }}
-                </div>
+          <!-- DROPDOWN -->
 
-                <div>
-                  <h6>{{ user.username }}</h6>
+          <ul class="dropdown-menu custom-dropdown dropdown-menu-end">
 
-                  <p>{{ user.email }}</p>
-                </div>
-              </li>
+            <!-- USER INFO -->
 
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
+            <li class="dropdown-user">
 
-              <!-- MENU ITEMS -->
+              <div class="dropdown-avatar">
+                {{ user.username|first|upper }}
+              </div>
 
-              <li>
-                <a class="dropdown-item custom-item" href="{% url 'profile' %}">
-                   My Profile
-                </a>
-              </li>
+              <div>
+                <h6>{{ user.username }}</h6>
+                <p>{{ user.email }}</p>
+              </div>
 
-              <li>
-                <a class="dropdown-item custom-item" href="{% url 'history' %}">
-                   Transaction History
-                </a>
-              </li>
+            </li>
 
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
 
-              <!-- LOGOUT -->
+            <!-- MENU ITEMS -->
 
-              <li>
-                <form method="POST" action="{% url 'logout' %}">
-                  {% csrf_token %}
+            <li>
+              <a class="dropdown-item custom-item" href="{% url 'profile' %}">
+                My Profile
+              </a>
+            </li>
 
-                  <button type="submit" class="dropdown-item logout-item">
-                    🚪 Logout
-                  </button>
-                </form>
-              </li>
-            </ul>
-          </div>
+            <li>
+              <a class="dropdown-item custom-item" href="{% url 'history' %}">
+                Transaction History
+              </a>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+
+            <!-- LOGOUT -->
+
+            <li>
+
+              <form method="POST" action="{% url 'logout' %}">
+
+                {% csrf_token %}
+
+                <button type="submit" class="dropdown-item logout-item">
+                  🚪 Logout
+                </button>
+
+              </form>
+
+            </li>
+
+          </ul>
+
           {% else %}
 
-          <a href="{% url 'login' %}" class="nav-btn login-btn-nav"> Login </a>
+          <a href="{% url 'login' %}" class="nav-btn login-btn-nav">
+            Login
+          </a>
 
           <a href="{% url 'register' %}" class="nav-btn register-btn-nav">
             Register
           </a>
 
           {% endif %}
+
         </div>
       </div>
     </nav>
 
-    {% block content %} {% endblock %}
+    <!-- PAGE CONTENT -->
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- BOOTSTRAP JS -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
 
-window.onload = function(){
+    <!-- LOADER SCRIPT -->
 
-    document.getElementById("loader").style.display = "none";
+    <script>
 
-};
+      window.addEventListener("load", function () {
 
-</script>
-  
+        document.getElementById("loader").style.display = "none";
+
+      });
+
+    </script>
+
   </body>
 </html>
