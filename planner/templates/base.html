@@ -25,6 +25,12 @@
   </head>
 
   <body>
+
+    <!-- PAGE LOADER -->
+<div id="loader">
+  <div class="spinner"></div>
+</div>
+
     <nav class="premium-navbar">
       <div class="nav-container">
         <!-- LOGO -->
@@ -127,5 +133,12 @@
     {% block content %} {% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <script>
+  window.addEventListener("load", function () {
+    document.getElementById("loader").style.display = "none";
+  });
+</script>
+  
   </body>
 </html>
