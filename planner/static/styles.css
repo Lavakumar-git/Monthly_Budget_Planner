@@ -820,7 +820,7 @@ body {
 }
 
 /* =========================
-   SMALL CENTER LOADER
+   TRANSPARENT LOADER
 ========================= */
 
 #loader{
@@ -831,10 +831,6 @@ body {
     right: 20px;
 
     z-index: 999999;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 /* Spinner */
@@ -851,8 +847,6 @@ body {
     border-radius: 50%;
 
     animation: spin 0.8s linear infinite;
-
-    box-shadow: 0 0 15px rgba(56,189,248,0.5);
 
 }
 
